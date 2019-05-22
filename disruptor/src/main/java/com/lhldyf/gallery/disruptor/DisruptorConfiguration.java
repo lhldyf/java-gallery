@@ -43,6 +43,8 @@ public class DisruptorConfiguration implements ApplicationContextAware {
         //          .thenHandleEventsWithWorkerPool(statisticHandler);
 
         disruptor.handleEventsWith(transformHandler).then(alertHandler, storageHandler).then(statisticHandler);
+        disruptor.handleExceptionsFor(transformHandler).with(new TransformExceptionHandler());
+        disruptor.setDefaultExceptionHandler(new DefaultExceptionHandler());
         messageProducer.setRingBuffer(disruptor.getRingBuffer());
         BeanRegisterUtils.registerSingleton(applicationContext, "MessageEventDisruptorLifeCycleContainer",
                                             new DisruptorLifeCycleContainer("MessageEventDisruptor", disruptor,

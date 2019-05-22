@@ -19,6 +19,9 @@ public class TransformHandler implements EventHandler<MessageEventEntity>, WorkH
     @Override
     public void onEvent(MessageEventEntity event) throws Exception {
         System.out.println("before transform, message: " + event.getMessage());
+        if(event.getMessage().contains("not")) {
+            throw new RuntimeException("无需采集的数据");
+        }
         event.setMessage(event.getMessage() + " has been transformed");
         System.out.println("after transform, message: " + event.getMessage());
     }

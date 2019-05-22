@@ -15,7 +15,13 @@ public class MessageProducer {
 
 
     public void onData(String message) {
-        ringBuffer.publishEvent(TRANSLATOR, message);
+        try {
+            ringBuffer.publishEvent(TRANSLATOR, message);
+        } catch (Exception e) {
+            System.out.println("异常");
+            e.printStackTrace();
+        }
+
     }
 
 

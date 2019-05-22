@@ -18,6 +18,9 @@ public class AlertHandler implements WorkHandler<MessageEventEntity>, EventHandl
 
     @Override
     public void onEvent(MessageEventEntity event, long sequence, boolean endOfBatch) throws Exception {
+        if(event.getMessage().contains("not")) {
+            throw new RuntimeException("无需采集的数据");
+        }
         this.onEvent(event);
     }
 }
