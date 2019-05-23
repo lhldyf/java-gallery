@@ -11,5 +11,4 @@ public class RegexConstant {
      */
     public static final String MATCH_JSON_KEY = "\"%s\":\"?(\\w+)\"?";
 
-    public static final String CONTENT_OR = "";
 }
