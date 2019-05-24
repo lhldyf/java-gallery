@@ -1,5 +1,6 @@
 package com.lhldyf.gallery.regex.test;
 
+import com.lhldyf.gallery.regex.RegexConstant;
 import com.lhldyf.gallery.regex.RegexUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,5 +28,15 @@ public class RegexTest {
 
         Assert.assertTrue(RegexUtil.match("error|warn", "2019:05:22|error|info|warn"));
         Assert.assertFalse(RegexUtil.match("error|warn", "2019:05:22|info"));
+    }
+
+    @Test
+    public void testStartWithNum() {
+        Assert.assertTrue(RegexUtil.match(RegexConstant.START_WITH_NUM_0, "001"));
+        Assert.assertFalse(RegexUtil.match(RegexConstant.START_WITH_NUM_0, "100"));
+        Assert.assertFalse(RegexUtil.match(RegexConstant.START_WITH_NUM_0, "000a"));
+        Assert.assertTrue(RegexUtil.match(RegexConstant.START_WITH_NUM_0_OR_2, "200"));
+        Assert.assertTrue(RegexUtil.match(RegexConstant.START_WITH_NUM_0_OR_2, "001"));
+        Assert.assertFalse(RegexUtil.match(RegexConstant.START_WITH_NUM_0_OR_2, "101"));
     }
 }
