@@ -13,6 +13,7 @@
         <module>socket</module>
         <module>utils</module>
         <module>mvel</module>
+        <module>protobuf</module>
     </modules>
     <packaging>pom</packaging>
 

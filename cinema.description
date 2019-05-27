@@ -1,0 +1,29 @@
+
+è
+
+test.proto"‰
+Movie
+name (	Rname
+type (2
+.MovieTypeRtype*
+releaseTimeStamp (RreleaseTimeStamp 
+description (	Rdescription"m
+Customer
+name (	Rname
+gender (2.GenderRgender,
+birthdayTimeStamp (RbirthdayTimeStamp"]
+Ticket
+id (Rid
+movie (2.MovieRmovie%
+customer (2	.CustomerRcustomer*;
+	MovieType
+CHILDREN	
+ADULT
+
+NORMAL	
+OHTER*'
+Gender
+MAN	
+WOMAN	
+OTHERB
+com.lhldyf.gallery.proto

@@ -1,0 +1,35 @@
+syntax="proto2";
+
+option java_package="com.lhldyf.gallery.proto";
+
+enum MovieType{
+ CHILDREN=1;
+ ADULT=2;
+ NORMAL=3;
+ OHTER=4;
+}
+
+enum Gender{
+ MAN=1;
+ WOMAN=2;
+ OTHER=3;
+}
+
+message Movie{
+ required string name=1;
+ required MovieType type=2;
+ optional int32 releaseTimeStamp=3;
+ optional string description=4;
+}
+
+message Customer{
+ required string name=1;
+ optional Gender gender=2;
+ optional int32 birthdayTimeStamp=3;
+}
+
+message Ticket{
+ required int32 id=1;
+ required Movie movie=2;
+ required Customer customer=3;
+}
