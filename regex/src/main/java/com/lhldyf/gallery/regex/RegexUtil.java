@@ -20,20 +20,16 @@ public class RegexUtil {
     }
 
     public static boolean match(String pattern, String content) {
-        return  match(Pattern.compile(pattern), content);
+        return match(Pattern.compile(pattern), content);
     }
 
     public static List<String> getMatchValues(Pattern pattern, String content) {
         Matcher matcher = pattern.matcher(content);
-        if (matcher.find()) {
-            int count = matcher.groupCount();
-            List<String> list = new LinkedList<>();
-            for (int i = 1; i <= count; i++) {
-                list.add(matcher.group(i));
-            }
-            return list;
+        List<String> list = new LinkedList<>();
+        while (matcher.find()) {
+            list.add(matcher.group());
         }
-        return null;
+        return list;
     }
 
     public static List<String> getMatchValues(String pattern, String content) {
@@ -45,4 +41,5 @@ public class RegexUtil {
         String pattern = String.format(MATCH_JSON_KEY, key);
         return getMatchValues(pattern, content);
     }
+
 }
