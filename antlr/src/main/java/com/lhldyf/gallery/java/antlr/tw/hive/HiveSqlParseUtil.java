@@ -75,7 +75,7 @@ public class HiveSqlParseUtil {
     public static void main(String[] args) throws Exception {
         // parse("Select name,ip from zpc2 bieming where age > 10 and area in (select area from system.city)");
         // parse("select * from table1");
-        parse("select col_1, col_2 from table1, table2 where col_3=col_4");
+        parse("select t.a, t.* from (select a,b,c from table1, table2) t");
         parse("select t1.col_1, t2.col_2 from table1 t1 join table2 t2 on t1.col3 = t2.col4");
         // parse("insert into table db1.desc_table select * from db2.source_table");
         // parse("insert into table desc_table(a,b,c) values(1,2,3)");

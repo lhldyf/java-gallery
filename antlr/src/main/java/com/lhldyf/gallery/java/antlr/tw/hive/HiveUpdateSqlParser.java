@@ -24,22 +24,26 @@ public class HiveUpdateSqlParser extends AbstractHiveCrudSqlParser {
         if (HiveParser.TOK_TAB == ast.getType()) {
             // Insert/Update 的表
             // 参考格式： (TOK_TAB (TOK_TABNAME default update_table) )
-            String db = parseTableDb(ast);
-            String tableName = parseTableName(ast);
-            runtimeEntity.setCurrDbTable(new String[] {db, tableName});
-            putAffectMap(runtimeEntity, db, tableName);
+            parseTokTab(runtimeEntity, ast);
+            putAffectMap(runtimeEntity, runtimeEntity.getCurrDbTable()[0], runtimeEntity.getCurrDbTable()[1]);
         } else if (HiveParser.TOK_UPSET_ELEMENT == ast.getType()) {
-            // 更新的列
-            // 参考格式： (TOK_UPSET_ELEMENT (column_1) ('1'))
             String db = runtimeEntity.getCurrDbTable()[0];
             String tableName = runtimeEntity.getCurrDbTable()[1];
-            putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getText());
+            if (HiveParser.DOT == ast.getChild(0).getType()) {
+                putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getChild(1).getText());
+            } else {
+                putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getText());
+            }
         } else if (HiveParser.TOK_UPSET_ELEMENT_SUBQUERY == ast.getType()) {
             // 更新列带子查询
             // 参考格式： (TOK_UPSET_ELEMENT_SUBQUERY (TOK_TABCOLNAME (column_2)) (TOK_QUERY ...))
             String db = runtimeEntity.getCurrDbTable()[0];
             String tableName = runtimeEntity.getCurrDbTable()[1];
-            putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getChild(0).getText());
+            if (ast.getChild(0).getChild(0).getType() == HiveParser.DOT) {
+                putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getChild(0).getChild(1).getText());
+            } else {
+                putAffectMap(runtimeEntity, db, tableName, ast.getChild(0).getChild(0).getText());
+            }
         }
     }
 

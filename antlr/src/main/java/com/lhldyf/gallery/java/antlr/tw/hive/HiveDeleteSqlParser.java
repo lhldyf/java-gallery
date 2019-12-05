@@ -22,10 +22,9 @@ public class HiveDeleteSqlParser extends AbstractHiveCrudSqlParser {
         if (HiveParser.TOK_TAB == ast.getType()) {
             // Insert/Update/DELETE 的表
             // 参考格式： (TOK_TAB (TOK_TABNAME default update_table) )
-            String db = parseTableDb(ast);
-            String tableName = parseTableName(ast);
-            runtimeEntity.setCurrDbTable(new String[] {db, tableName});
-            putAffectMap(runtimeEntity, db, tableName, SqlParseConstant.COLUMN_ALL);
+            parseTokTab(runtimeEntity, ast);
+            putAffectMap(runtimeEntity, runtimeEntity.getCurrDbTable()[0], runtimeEntity.getCurrDbTable()[1],
+                         SqlParseConstant.COLUMN_ALL);
         }
     }
 

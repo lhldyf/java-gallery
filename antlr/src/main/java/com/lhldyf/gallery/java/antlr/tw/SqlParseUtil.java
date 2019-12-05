@@ -28,10 +28,10 @@ public class SqlParseUtil {
     }
 
     public static void main(String[] args) {
-        selectTest();
+        // selectTest();
         insertTest();
-        updateTest();
-        deleteTest();
+        // updateTest();
+        // deleteTest();
         dropTest();
         truncateTest();
         grantTest();
@@ -65,28 +65,33 @@ public class SqlParseUtil {
     }
 
     private static void deleteTest() {
-        // parseHiveSql("delete from delete_table where id1 in ( select id2 from where_table)");
-        // parseHiveSql("delete from delete_table where 1=1 and col1 = 2;");
+        parseHiveSql("delete from delete_table where id1 in ( select id2 from where_table)");
+        parseHiveSql("delete from delete_table t  where 1=1 and t.col1 = 2;");
+        parseHiveSql("delete from delete_table t  where 1=1 ");
     }
 
     private static void updateTest() {
-        // parseHiveSql("update update_table set column_1 = '1', column_2=2 where column_3 = '3'");
-        // parseHiveSql("update update_table set column_1 = '1', column_2=2 where 1=1");
-        // parseHiveSql(
-        //         "update default.update_table set column_1 = '1', column_2=(select a from table1) where column_3 in "
-        //                 + "(select " + "where_colmun from db1.where_table)");
+        parseHiveSql("update update_table t set t.column_1 = '1', t.column_2=2 where t.column_3 = '3'");
+        parseHiveSql("update update_table set column_1 = '1', column_2=2 where 1=1");
+        parseHiveSql(
+                "update default.update_table t set t.column_1 = '1', t.column_2=(select a from table1) where column_3"
+                        + " in " + "(select " + "where_colmun from db1.where_table)");
     }
 
     private static void insertTest() {
-        // parseHiveSql("insert into table db1.desc_table select alia1.col_1, alia2.col_2 from table1 alia1, table2 "
-        //                      + "alia2 where alia1.cond1 = alia2.cond2");
-        // parseHiveSql("insert into table db1.desc_table select * from db2.source_table");
-        // parseHiveSql("insert into table desc_table(a,b,c) values(1,2,3)");
-        // parseHiveSql("insert into table desc_table values(1,2,3)");
+        parseHiveSql("insert into table db1.desc_table select alia1.col_1, alia2.col_2 from table1 alia1, table2 "
+                             + "alia2 where alia1.cond1 = alia2.cond2");
+        parseHiveSql("insert into table db1.desc_table select * from db2.source_table");
+        parseHiveSql("insert into table desc_table(a,b,c) values(1,2,3)");
+        parseHiveSql("insert into table desc_table values(1,2,3)");
+        parseHiveSql("INSERT INTO default.wal_test SELECT NAMED_STRUCT('table_name','table_name-29350','etl_time',"
+                             + "systimestamp,'data_source_system','data_source_system-29350'), 'table_name-29350', CAST"
+                             + "(TO_DATE(sysdate) AS DATE), systimestamp, 'TEST', 'data_source_system-29350', "
+                             + "'testHbaseWAL', 342 FROM system.dual");
     }
 
     private static void selectTest() {
-        parseHiveSql("select * from (select a,b,c from table1) t");
+        parseHiveSql("select t.a, t.* from (select a,b,c from table1) t");
         parseHiveSql("");
         // parseHiveSql("select alia1.col_1, alia2.col_2 from table1 alia1, table2 alia2 where alia1.cond1 = alia2
         // .cond2");

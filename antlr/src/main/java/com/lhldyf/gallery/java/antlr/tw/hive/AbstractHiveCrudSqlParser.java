@@ -123,17 +123,18 @@ public abstract class AbstractHiveCrudSqlParser
                     column = ast.getChild(0).getText();
                 }
 
-                db = dbTable[0];
-                tableName = dbTable[1];
+                if (null != dbTable) {
+                    db = dbTable[0];
+                    tableName = dbTable[1];
 
-                runtimeEntity.setHasFilter(true);
-                // 如果当前是where子句，那么加入到related，若不是where子句，加入到affect
-                if (runtimeEntity.isAffectClause()) {
-                    putAffectMap(runtimeEntity, db, tableName, column);
-                } else {
-                    putRelatedMap(runtimeEntity, db, tableName, column);
+                    runtimeEntity.setHasFilter(true);
+                    // 如果当前是where子句，那么加入到related，若不是where子句，加入到affect
+                    if (runtimeEntity.isAffectClause()) {
+                        putAffectMap(runtimeEntity, db, tableName, column);
+                    } else {
+                        putRelatedMap(runtimeEntity, db, tableName, column);
+                    }
                 }
-
             } else if (HiveParser.TOK_ALLCOLREF == ast.getType()) {
                 // SQL中的`*`
 
@@ -149,13 +150,15 @@ public abstract class AbstractHiveCrudSqlParser
                     dbTable = runtimeEntity.getCurrDbTable();
                 }
 
-                db = dbTable[0];
-                tableName = dbTable[1];
-                // 如果当前是where子句，那么加入到related，若不是where子句，加入到affect
-                if (runtimeEntity.isAffectClause()) {
-                    putAffectMap(runtimeEntity, db, tableName, column);
-                } else {
-                    putRelatedMap(runtimeEntity, db, tableName, column);
+                if (null != dbTable) {
+                    db = dbTable[0];
+                    tableName = dbTable[1];
+                    // 如果当前是where子句，那么加入到related，若不是where子句，加入到affect
+                    if (runtimeEntity.isAffectClause()) {
+                        putAffectMap(runtimeEntity, db, tableName, column);
+                    } else {
+                        putRelatedMap(runtimeEntity, db, tableName, column);
+                    }
                 }
             } else {
                 customParseCurrent(ast, runtimeEntity);
@@ -295,5 +298,18 @@ public abstract class AbstractHiveCrudSqlParser
 
         putRelatedMap(entity, database, tableName);
         entity.getRelatedMap().get(database).get(tableName).add(column);
+    }
+
+    protected void parseTokTab(HiveCrudParseRuntimeEntity runtimeEntity, ASTNode ast) {
+        String db = parseTableDb(ast);
+        String tableName = parseTableName(ast);
+
+        if (ast.getChildCount() == 2) {
+            // 如果有两个子节点，第二个子节点为该表的别名
+            String alias = ast.getChild(1).getText();
+            runtimeEntity.getAliasMap().put(alias, new String[] {db, tableName});
+        }
+
+        runtimeEntity.setCurrDbTable(new String[] {db, tableName});
     }
 }
