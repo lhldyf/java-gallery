@@ -7,8 +7,12 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 import org.apache.hadoop.hive.ql.parse.ParseDriver;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * SQL Parser的核心逻辑实现
@@ -31,8 +35,10 @@ public abstract class AbstractHiveSqlParser<T extends HiveSqlParseRuntimeEntity,
     public R parse(String sql, String sqlType) {
 
         try {
+
             // 调用hive的解析接口解析成语法树
-            ASTNode astNode = parseDriver.parse(sql, null, hiveConf);
+            String command = removeComment(sql);
+            ASTNode astNode = parseDriver.parse(command, null, hiveConf);
             System.out.println(astNode.dumpAsTree());
 
             // 初始化运行时对象
@@ -114,5 +120,27 @@ public abstract class AbstractHiveSqlParser<T extends HiveSqlParseRuntimeEntity,
     protected abstract T constructRuntimeEntity(String sqlType);
 
 
+    // static Pattern removeCommentPattern = Pattern.compile("(?ms)('(?:''|[^'])*')|--.*?$|/\\*.*?\\*/|#.*?$|");
+    static Pattern removeCommentPattern = Pattern.compile("(-+[a-zA-Z0-9_\\u4e00-\\u9fa5]+\\s)");
+    static List<Pattern> patterns = new ArrayList<>();
+    static {
+        patterns.add(removeCommentPattern);
+    }
+
+    static String removeComment(String sql) {
+        System.out.println("SQL原文: " + sql);
+
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(sql);
+            String fixText;
+            while (matcher.find()) {
+                fixText = matcher.group();
+                sql = sql.replace(fixText, " ");
+            }
+        }
+
+        System.out.println("去除注释后: " + sql);
+        return sql;
+    }
 
 }

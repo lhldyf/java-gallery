@@ -22,7 +22,7 @@ public class SqlParseConstant {
     public static final String PAYLOAD_TYPE_TABLE = "table";
     public static final String PAYLOAD_TYPE_ROLE = "role";
 
-    public static final String PERMIT_TYPE_CREATE = "create";
+    public static final String PERMIT_TYPE_INSERT = "insert";
     public static final String PERMIT_TYPE_UPDATE = "update";
     public static final String PERMIT_TYPE_DELETE = "delete";
     public static final String PERMIT_TYPE_SELECT = "select";

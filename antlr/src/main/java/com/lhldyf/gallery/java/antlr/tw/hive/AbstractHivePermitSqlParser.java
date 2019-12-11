@@ -76,9 +76,6 @@ public class AbstractHivePermitSqlParser
                 case HiveParser.TOK_GROUP:
                     runtimeEntity.getGroups().add(ast.getChild(0).getText());
                     break;
-                case HiveParser.TOK_PRIV_CREATE:
-                    runtimeEntity.getOpTypes().add(PERMIT_TYPE_CREATE);
-                    break;
                 case HiveParser.TOK_PRIV_ALL:
                     runtimeEntity.getOpTypes().add(PERMIT_TYPE_ALL);
                     break;
@@ -87,6 +84,9 @@ public class AbstractHivePermitSqlParser
                     break;
                 case HiveParser.TOK_PRIV_SELECT:
                     runtimeEntity.getOpTypes().add(PERMIT_TYPE_SELECT);
+                    break;
+                case HiveParser.TOK_PRIV_INSERT:
+                    runtimeEntity.getOpTypes().add(PERMIT_TYPE_INSERT);
                     break;
                 case HiveParser.TOK_PRIV_ALTER_DATA:
                     runtimeEntity.getOpTypes().add(PERMIT_TYPE_UPDATE);
