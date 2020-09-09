@@ -17,6 +17,6 @@ public class StatisticHandler implements EventHandler<MessageEventEntity>, WorkH
 
     @Override
     public void onEvent(MessageEventEntity event) throws Exception {
-        System.out.println(event.getMessage() + " do statistic in the end");
+        // System.out.println(event.getMessage() + " do statistic in the end");
     }
 }

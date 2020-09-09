@@ -35,7 +35,7 @@ public class DisruptorConfiguration implements ApplicationContextAware {
     @Bean
     public MessageProducer messageProducer() {
         MessageProducer messageProducer = new MessageProducer();
-        Disruptor disruptor = new Disruptor<>(new MessageEventFactory(), 1024 * 1024, Executors.defaultThreadFactory());
+        Disruptor disruptor = new Disruptor<>(new MessageEventFactory(), 1024 * 32, Executors.defaultThreadFactory());
 
         // handleEventsWithWorkerPool 在同一个work组的是竞争关系，也就是只有一个handler能拿到数据进行处理
         // disruptor.handleEventsWithWorkerPool(transformHandler)
@@ -47,8 +47,7 @@ public class DisruptorConfiguration implements ApplicationContextAware {
         disruptor.setDefaultExceptionHandler(new DefaultExceptionHandler());
         messageProducer.setRingBuffer(disruptor.getRingBuffer());
         BeanRegisterUtils.registerSingleton(applicationContext, "MessageEventDisruptorLifeCycleContainer",
-                                            new DisruptorLifeCycleContainer("MessageEventDisruptor", disruptor,
-                                                                            1));
+                                            new DisruptorLifeCycleContainer("MessageEventDisruptor", disruptor, 1));
         return messageProducer;
     }
 

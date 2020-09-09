@@ -22,6 +22,8 @@ public class HiveSelectSqlParser extends AbstractHiveCrudSqlParser {
             runtimeEntity.setWhereClause(runtimeEntity.getWhereClauseStack().pop());
         } else if (HiveParser.TOK_SELECT == ast.getType() || HiveParser.TOK_FROM == ast.getType()) {
             runtimeEntity.setAffectClause(runtimeEntity.getAffectClauseStack().pop());
+        } else if (HiveParser.TOK_JOIN == ast.getType()) {
+            runtimeEntity.setAffectClause(runtimeEntity.getAffectClauseStack().pop());
         }
     }
 
@@ -35,6 +37,9 @@ public class HiveSelectSqlParser extends AbstractHiveCrudSqlParser {
         } else if (HiveParser.TOK_SELECT == ast.getType() || HiveParser.TOK_FROM == ast.getType()) {
             runtimeEntity.getAffectClauseStack().push(runtimeEntity.isAffectClause());
             runtimeEntity.setAffectClause(!runtimeEntity.isWhereClause());
+        } else if (HiveParser.EQUAL == ast.getType() && HiveParser.TOK_JOIN == ast.getParent().getType()) {
+            runtimeEntity.getAffectClauseStack().push(runtimeEntity.isAffectClause());
+            runtimeEntity.setAffectClause(false);
         }
     }
 }

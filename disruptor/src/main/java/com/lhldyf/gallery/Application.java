@@ -4,8 +4,7 @@ import com.lhldyf.gallery.disruptor.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,9 +23,9 @@ public class Application {
     MessageProducer messageProducer;
 
 
-    @GetMapping("{message}")
-    public String test(@PathVariable String message) {
-        messageProducer.onData(message);
-        return "success";
+    @PostMapping("test")
+    public String test(String message) {
+        messageProducer.onData("luohui");
+        return "\"status\":\"Complete\"";
     }
 }

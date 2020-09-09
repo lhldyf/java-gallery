@@ -17,6 +17,7 @@ public class StorageHandler implements EventHandler<MessageEventEntity>, WorkHan
 
     @Override
     public void onEvent(MessageEventEntity event) throws Exception {
-        System.out.println(event.getMessage() + " do storage");
+        // System.out.println(event.getMessage() + " do storage");
+        boolean result = event.getMessage().equals("test");
     }
 }

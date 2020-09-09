@@ -1,0 +1,26 @@
+package com.lhldyf
+
+import com.lhldyf.gallery.java.drools.entity.IDSEntity
+rule "Low"
+    when
+        $s: IDSEntity(level <= 3, type =="aaa")
+    then
+        System.out.println("level <=3, set score = 0");
+        $s.setScore(0);
+end
+
+rule "Middle"
+    when
+        $s: IDSEntity(level > 3 && level < 10)
+    then
+        System.out.println("3 < level < 10, set score = 5");
+        $s.setScore(5);
+end
+
+rule "High"
+    when
+        $s: IDSEntity(level >= 10)
+    then
+        System.out.println("level >= 10, set score = 10");
+        $s.setScore(10);
+end

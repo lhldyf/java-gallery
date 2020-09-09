@@ -3,6 +3,7 @@ package com.lhldyf.gallery.java.antlr.tw.hive;
 import com.lhldyf.gallery.java.antlr.tw.SqlParseConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
+import org.apache.hadoop.hive.ql.parse.BaseSemanticAnalyzer;
 import org.apache.hadoop.hive.ql.parse.HiveParser;
 import org.apache.hadoop.hive.ql.parse.ParseUtils;
 
@@ -87,7 +88,7 @@ public abstract class AbstractHiveCrudSqlParser
                 String tableName = parseTableName(ast);
                 if (ast.getChildCount() == 2) {
                     // 如果有两个子节点，第二个子节点为该表的别名
-                    String alias = ast.getChild(1).getText();
+                    String alias = BaseSemanticAnalyzer.unescapeIdentifier(ast.getChild(1).getText());
                     runtimeEntity.getAliasMap().put(alias, new String[] {db, tableName});
                 }
 
@@ -112,22 +113,24 @@ public abstract class AbstractHiveCrudSqlParser
                 if (HiveParser.DOT == ast.getParent().getType()) {
                     // 如果父节点是DOT，说明是有别名的，把别名对应的`库名.表名`解析出来
                     // 当前节点的子节点为别名
-                    String alias = ast.getChild(0).getText();
+                    String alias = BaseSemanticAnalyzer.unescapeIdentifier(ast.getChild(0).getText());
                     // DOT的第二个节点为具体的列名
-                    column = ast.getParent().getChild(1).getText();
+                    column = BaseSemanticAnalyzer.unescapeIdentifier(ast.getParent().getChild(1).getText());
                     // 获取别名对应的库.表
                     dbTable = runtimeEntity.getAliasMap().get(alias);
                 } else {
                     // 父节点不是DOT，取上下文的库表
                     dbTable = runtimeEntity.getCurrDbTable();
-                    column = ast.getChild(0).getText();
+                    column = BaseSemanticAnalyzer.unescapeIdentifier(ast.getChild(0).getText());
                 }
 
                 if (null != dbTable) {
                     db = dbTable[0];
                     tableName = dbTable[1];
 
-                    runtimeEntity.setHasFilter(true);
+                    if (runtimeEntity.isWhereClause()) {
+                        runtimeEntity.setHasFilter(true);
+                    }
                     // 如果当前是where子句，那么加入到related，若不是where子句，加入到affect
                     if (runtimeEntity.isAffectClause()) {
                         putAffectMap(runtimeEntity, db, tableName, column);
@@ -144,7 +147,7 @@ public abstract class AbstractHiveCrudSqlParser
                 String[] dbTable;
                 if (ast.getChildCount() == 1) {
                     // 如果存在子节点，那么孙子节点是别名
-                    String alias = ast.getChild(0).getChild(0).getText();
+                    String alias = BaseSemanticAnalyzer.unescapeIdentifier(ast.getChild(0).getChild(0).getText());
                     dbTable = runtimeEntity.getAliasMap().get(alias);
                 } else {
                     dbTable = runtimeEntity.getCurrDbTable();
@@ -218,16 +221,6 @@ public abstract class AbstractHiveCrudSqlParser
         return tableName;
     }
 
-    public static String unEscapeIdentifier(String val) {
-        if (val == null) {
-            return null;
-        }
-        if (val.charAt(0) == '`' && val.charAt(val.length() - 1) == '`') {
-            val = val.substring(1, val.length() - 1);
-        }
-        return val;
-    }
-
     /**
      * 解析出 TOK_TAB/TOK_TABREF 的库名
      * @param ast TOK_TAB/TOK_TABREF对象
@@ -236,7 +229,7 @@ public abstract class AbstractHiveCrudSqlParser
     protected String parseTableDb(ASTNode ast) {
         ASTNode tableNameNode = (ASTNode) ast.getChild(0);
         if (tableNameNode.getChildCount() == 2) {
-            return tableNameNode.getChild(0).getText();
+            return BaseSemanticAnalyzer.unescapeIdentifier(tableNameNode.getChild(0).getText());
         } else {
             return DEFAULT_DB;
         }
@@ -250,9 +243,9 @@ public abstract class AbstractHiveCrudSqlParser
     protected String parseTableName(ASTNode ast) {
         ASTNode tableNameNode = (ASTNode) ast.getChild(0);
         if (tableNameNode.getChildCount() == 2) {
-            return tableNameNode.getChild(1).getText();
+            return BaseSemanticAnalyzer.unescapeIdentifier(tableNameNode.getChild(1).getText());
         } else {
-            return tableNameNode.getChild(0).getText();
+            return BaseSemanticAnalyzer.unescapeIdentifier(tableNameNode.getChild(0).getText());
         }
     }
 
@@ -306,7 +299,7 @@ public abstract class AbstractHiveCrudSqlParser
 
         if (ast.getChildCount() == 2) {
             // 如果有两个子节点，第二个子节点为该表的别名
-            String alias = ast.getChild(1).getText();
+            String alias = BaseSemanticAnalyzer.unescapeIdentifier(ast.getChild(1).getText());
             runtimeEntity.getAliasMap().put(alias, new String[] {db, tableName});
         }
 

@@ -29,7 +29,7 @@ public class RegexConstant {
 
 
     /**
-     * 提取中括号内容，这个表达式还包含中括号，比如[{a,b},{c,d}] 提取出 a,b和c,d
+     * 提取大括号内容，这个表达式不包含大括号，比如[{a,b},{c,d}] 提取出 a,b和c,d
      */
     public static final String MATCH_BIG_BRACKET = "(?<=\\{)(.+?)(?=\\})";
 }

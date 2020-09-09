@@ -14,6 +14,11 @@ import java.util.List;
 public class RegexTest {
 
     @Test
+    public void testShuxian() {
+        System.out.println(RegexUtil.match("IP\\|MAC*", "aaa|IP|MAC|aaa"));
+    }
+
+    @Test
     public void testMatchInJson() {
         List<String> resultList = RegexUtil.getMatchValuesInJson("result", "{\"result\":\"true\"}");
         for (String result : resultList) {
@@ -22,9 +27,10 @@ public class RegexTest {
     }
 
 
+    // "(?<=\\[)(.+?)(?=\\])"
     @Test
     public void testMatchList() {
-        List<String> resultList = RegexUtil.getMatchValues("(?<=\\[)(.+?)(?=\\])",
+        List<String> resultList = RegexUtil.getMatchValues(RegexConstant.MATCH_SQUARE_BRACKET,
                                                            "[{10.00,0.00,5.00,1.00,0.00,84.00,1.20,1.00,0.50}],"
                                                                    + "[{1024,1024.00,0.00,128,64.00,50.00},{0.50,0"
                                                                    + ".40,512,400}],[{/dev/sda1,/,40,10.00,25.00, "
@@ -49,6 +55,7 @@ public class RegexTest {
         Assert.assertTrue(RegexUtil.match("error|warn", "2019:05:22|error|info|warn"));
         Assert.assertFalse(RegexUtil.match("error|warn", "2019:05:22|info"));
     }
+
 
     @Test
     public void testStartWithNum() {

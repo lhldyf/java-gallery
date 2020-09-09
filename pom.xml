@@ -10,10 +10,19 @@
     <modules>
         <module>disruptor</module>
         <module>regex</module>
-        <module>socket</module>
+        <module>netty</module>
         <module>utils</module>
         <module>mvel</module>
         <module>protobuf</module>
+        <module>vertx</module>
+        <module>drools</module>
+        <module>pdf</module>
+        <module>office</module>
+        <module>druid</module>
+        <module>antlr</module>
+        <module>camel</module>
+        <module>groovy</module>
+        <module>easy-excel</module>
     </modules>
     <packaging>pom</packaging>
 

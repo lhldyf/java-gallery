@@ -2,7 +2,9 @@ package com.lhldyf.gallery.mvel;
 
 import org.mvel2.MVEL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +19,8 @@ public class MvelTest {
         map.put("b", 12);
         System.out.println(MVEL.eval("a>b", map));
         System.out.println(MVEL.eval("(a==b || a !=b) && a != b", map));
+
+
+        List<String> list = new ArrayList<>();
     }
 }
