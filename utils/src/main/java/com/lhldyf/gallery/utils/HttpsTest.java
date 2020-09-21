@@ -56,12 +56,12 @@ public class HttpsTest {
         HttpEntity<String> httpEntity = new HttpEntity<String>(httpBody, httpHeaders);
 
         // -------------------------------> URI
-        StringBuffer paramsURL = new StringBuffer("https://www.kxjf.com/user/login");
+        StringBuffer paramsURL = new StringBuffer("https://www.xxxx.com/user/login");
         // StringBuffer paramsURL = new StringBuffer("http://localhost:8081/api/trainManage/page");
         // 字符数据最好encoding一下;这样一来，某些特殊字符才能传过去(如:flag的参数值就是“&”,不encoding的话,传不过去)
         // paramsURL.append("?flag=" + URLEncoder.encode("&", "utf-8"));
         // paramsURL.append("userName=luohui&password=7yuGbsunLenwigV3KvtdpFBfkag4GMmrwcrECIdriCw%3D&validateCode=8523"
-        //                          + "&mainSiteName=kaifae&zhugeSid=1569577190328&zhugeDid=16628ffb3fc2c8"
+        //                          + "&mainSiteName=xxxx&zhugeSid=1569577190328&zhugeDid=16628ffb3fc2c8"
         //                          + "-0486ba81262f81-8383268-100200-16628ffb3fe39d\n");
         URI uri = URI.create(paramsURL.toString());
 
