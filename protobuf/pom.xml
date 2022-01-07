@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.6.1</version>
+            <version>3.16.1</version>
         </dependency>
 
         <!--If you want to use features like protobuf JsonFormat, add a dependency on the protobuf-java-util package:-->
